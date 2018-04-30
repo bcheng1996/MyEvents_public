@@ -1,0 +1,85 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">What are you into?
+            <br /> <small>seperate by commas</small> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="likes" placeholder="coffee,art,cute" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit">Find</button>
+                <a hidden id="link" href=""></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="monthModal" tabindex="-1" role="dialog" aria-labelledby="monthModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="monthModalLabel">Which month? </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="btn-group">
+                    <button type="button" id="Jan" class="btn btn-primary">Jan</button>
+                    <button type="button" id="Feb" class="btn btn-primary">Feb</button>
+                    <button type="button" id="Mar" class="btn btn-primary">Mar</button>
+                    <button type="button" id="Apr" class="btn btn-primary">Apr</button>
+                    <button type="button" id="May" class="btn btn-primary">May</button>
+                    <button type="button" id="Jun" class="btn btn-primary">Jun</button>
+                    <button type="button" id="Jul" class="btn btn-primary">Jul</button>
+                    <button type="button" id="Aug" class="btn btn-primary">Aug</button>
+                    <button type="button" id="Sep" class="btn btn-primary">Sep</button>
+                    <button type="button" id="Oct" class="btn btn-primary">Oct</button>
+                    <button type="button" id="Nov" class="btn btn-primary">Nov</button>
+                    <button type="button" id="Dec" class="btn btn-primary">Dec</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close2" data-dismiss="modal">Close</button>
+                <a hidden id="link2" href=""></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $("#submit").on('click', function() {
+        var likes = $("#likes").val().split(/,|\s/).map(function(curr) {
+            return curr.trim();
+        });
+        var res = "filters?filter=likes"
+
+        for (var i = 0; i < likes.length; i++) {
+            res = res + "&like=" + likes[i];
+        }
+        $("#link").attr('href', res);
+        document.getElementById('link').click();
+        $("#close").trigger('click');
+    });
+
+
+$(".btn-group button").on('click', function(){
+    var res = "filters?filter=time&month=" + this.id;
+    $("#link2").attr('href', res);
+    document.getElementById('link2').click();
+    $("#close").trigger('click');
+
+});
+
+</script>

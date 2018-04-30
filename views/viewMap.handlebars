@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<div id="map">
+    Loading Map</div>
+
+
+
+<script>
+    function initMap() {
+        var myLatLng = {
+            lat: -38.39914,
+            lng: -76.934
+        };
+
+        function sleep(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds) {
+                    break;
+                }
+            }
+        }
+
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                    var currPosLat = position.coords.latitude;
+                    var currPosLng = position.coords.longitude;
+                    var centerPosition = new google.maps.LatLng(currPosLat, currPosLng);
+                    var bounds = new google.maps.LatLngBounds();
+                    var geocoder = new google.maps.Geocoder();
+
+                    var mapOptions = {
+                        center: centerPosition,
+                        zoom: 17
+                    };
+                    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                    bounds.extend(centerPosition);
+                    currLocation = new google.maps.Marker({
+                        position: centerPosition,
+                        map: map,
+                        title: 'Current Position'
+                    });
+
+
+
+                    {{#each events}}
+
+                    var loc = "{{this.location}}";
+
+                    geocoder.geocode({
+                        'address': loc
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location,
+                                clickable: true,
+                                title: '{{this.name}}'
+                            });
+                            marker.info = new google.maps.InfoWindow({
+                                content: "<h1>{{this.name}}</h1>" +
+                                    "<p>Location: {{this.location}}</p>" +
+                                    "<p>Time: {{this.time}}</p>" +
+                                    "<p>About: {{this.notes}}</p>" +
+                                    "<p>Cost: ${{this.cost}}</p>"
+                            });
+                            google.maps.event.addListener(marker, 'click', function() {
+                                marker.info.open(map, marker);
+                            })
+                            //alert("ok!");
+                        } else {
+
+                            if(status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+                            //alert("{{this.name}}" + " failed to add because " + status);
+                        }
+                    });
+                    {{/each}}
+
+                    });
+                }
+
+
+            }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5t2by1Yo1Yy8Yn-pqpbxmWZ2MsZWC7vk
+&callback=initMap">
+</script>

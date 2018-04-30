@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">MyEvents</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="{{#if active.free}}active{{/if}}"><a href="filters?filter=free">Free</a></li>
+            <li class="{{#if active.popular}}active{{/if}}"><a href="filters?filter=popular">Popular</a></li>
+            <li class="{{#if active.like}}active{{/if}}"><a id="like" href="#myModal" role="button" data-toggle="modal" data-target="#myModal"> Like...</a></li>
+            <li class="{{#if active.time}}active{{/if}}"><a id="time" href="#monthModal" role="button" data-toggle="modal" data-target="#monthModal"> Time </a></li>
+            <li class="{{#if active.random}}active{{/if}}"><a href="/filters?filter=random">Random</a></li>
+            <li class="{{#if active.map}}active{{/if}}"><a href="/viewMap">Map</a></li>
+</ul>
+            <ul class="nav navbar-nav navbar-right">
+
+            <li class="{{#if active.add}}active{{/if}}"><a href="/addEvent">Create New Event</a></li>
+            </ul>
+
+
+    </div>
+</nav>

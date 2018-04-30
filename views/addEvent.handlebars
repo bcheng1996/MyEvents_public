@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+{{#if added}}
+    <script>
+        alert("added!");
+    </script>
+{{/if}}
+
+<div id="form">
+    <h1>Create New Event</h1>
+    <form id="frmUploader" enctype="multipart/form-data" action="addEvent" method="post">
+        <div class="form-group">
+            <label for="name">Event Name</label>
+            <input required type="text" class="form-control" id="name" name="name" placeholder="Enter event name">
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input required type="String" class="form-control" id="location" name="location" placeholder="8150 Baltimore Ave">
+        </div>
+        <div class="form-group">
+            <label for="time_in">Time</label>
+            <input required type="text" class="form-control" id="time_in" name="time" placeholder="Wed Apr 18 2018" />
+        </div>
+        <div class="form-group">
+            <label for="note">About</label>
+            <textarea class="form-control" rows="5" id="note" name="note"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="attendees">Who's going?</label>
+            <input required type="text" class="form-control" id="attendees" name="attendees" placeholder="John Smith, George W Bush" />
+        </div>
+        <div class="form-group">
+            <label for="cost">Fees (put 0 if free)</label>
+        <input required type="number" class="form-control" id="cost" name="cost" placeholder="0" min="0" />
+        </div>
+
+        <div class="form-group">
+            <label for="picture">Image</label>
+            <input type="file" class="form-control" id="picture" name="imgUploader" accept="image/x-png,image/gif,image/jpeg" />
+        </div>
+
+
+
+
+
+        <button type="submit" id="form_post" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+
+<script src="https://unpkg.com/js-datepicker"></script>
+<script>
+    //
+    const picker = datepicker('#time_in');
+    $('#tempbtn').on('click', function(){
+        alert(123);
+    });
+     $('#time_in').keydown(function(e) {
+         e.preventDefault();
+     });
+
+    $('#frmUploader').submit(function() {
+        $(this).ajaxSubmit();
+
+    });
+
+    // bind to the form's submit event
+
+
+
+
+
+
+
+    function activatePlacesSearch() {
+        var input = document.getElementById('location');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+    }
+</script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFo3Pcf-h6b6cypFWrUl5lZstmQUEmSXg&libraries=places&callback=activatePlacesSearch"></script>
