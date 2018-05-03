@@ -86,6 +86,7 @@ app.post('/addEvent', function(req, res) {
             var event = new Event({
                 name: name,
                 location: location,
+                pictures: pictures,
                 time: time,
                 notes: note,
                 attendees: attendees,
@@ -98,7 +99,6 @@ app.post('/addEvent', function(req, res) {
                 time: time,
                 notes: note,
                 attendees: attendees,
-                pictures: pictures,
                 cost: cost
             });
         }
