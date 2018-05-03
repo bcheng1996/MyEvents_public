@@ -10,6 +10,7 @@ Date: 4/27/2018
 Project Topic: Activity Around Campus
 
 URL: https://blooming-brushlands-91791.herokuapp.com/
+Git: https://github.com/bcheng1996/MyEvents_public
 
 ---
 

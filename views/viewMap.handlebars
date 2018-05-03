@@ -5,84 +5,105 @@
 
 
 <script>
+    var EVENTS = [];
+    var places = [];
+    var curr_event_count = 0;
+    var stopped_event = 0;
+    var timeout = 600;
+    var geocoder;
+    var map;
+    {{#each events}}
+    EVENTS[curr_event_count] = {
+        name: '{{this.name}}',
+        location: '{{this.location}}',
+        time: '{{this.time}}',
+        notes: '{{this.notes}}',
+        cost: '{{this.cost}}'
+
+    };
+    curr_event_count = curr_event_count + 1;
+    {{/each}}
+
+
+
     function initMap() {
         var myLatLng = {
             lat: -38.39914,
             lng: -76.934
         };
-
-        function sleep(milliseconds) {
-            var start = new Date().getTime();
-            for (var i = 0; i < 1e7; i++) {
-                if ((new Date().getTime() - start) > milliseconds) {
-                    break;
-                }
-            }
-        }
-
+        geocoder = new google.maps.Geocoder();
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                    var currPosLat = position.coords.latitude;
-                    var currPosLng = position.coords.longitude;
-                    var centerPosition = new google.maps.LatLng(currPosLat, currPosLng);
-                    var bounds = new google.maps.LatLngBounds();
-                    var geocoder = new google.maps.Geocoder();
+                var currPosLat = position.coords.latitude;
+                var currPosLng = position.coords.longitude;
+                var centerPosition = new google.maps.LatLng(currPosLat, currPosLng);
+                var bounds = new google.maps.LatLngBounds();
 
-                    var mapOptions = {
-                        center: centerPosition,
-                        zoom: 17
-                    };
-                    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-                    bounds.extend(centerPosition);
-                    currLocation = new google.maps.Marker({
-                        position: centerPosition,
-                        map: map,
-                        title: 'Current Position'
-                    });
-
+                var mapOptions = {
+                    center: centerPosition,
+                    zoom: 17
+                };
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                bounds.extend(centerPosition);
+                currLocation = new google.maps.Marker({
+                    position: centerPosition,
+                    map: map,
+                    title: 'Current Position'
+                });
 
 
-                    {{#each events}}
 
-                    var loc = "{{this.location}}";
 
-                    geocoder.geocode({
-                        'address': loc
-                    }, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var marker = new google.maps.Marker({
+            });
+        }
+        geoCode(stopped_event);
+    }
+
+    function geoCode(position){
+        geocoder.geocode({'address': EVENTS[position].location}, function(results, status)
+    {
+        if (status == google.maps.GeocoderStatus.OK) {
+            places[position] = results[0].geometry.location;
+
+            var marker = new google.maps.Marker({
                                 map: map,
                                 position: results[0].geometry.location,
                                 clickable: true,
                                 title: '{{this.name}}'
                             });
                             marker.info = new google.maps.InfoWindow({
-                                content: "<h1>{{this.name}}</h1>" +
-                                    "<p>Location: {{this.location}}</p>" +
-                                    "<p>Time: {{this.time}}</p>" +
-                                    "<p>About: {{this.notes}}</p>" +
-                                    "<p>Cost: ${{this.cost}}</p>"
+                                content: "<h2>" + EVENTS[position].name + "</h2>" +
+                                "<p>" + "Locaiton:" + EVENTS[position].location + "</p>" +
+                                "<p>" + "Time:" + EVENTS[position].time + "</p>" +
+                                "<p>" + "About:" + EVENTS[position].notes + "</p>" +
+                                "<p>" + "Cost:" + "$" + EVENTS[position].cost + "</p>"
+
+
+
+
                             });
                             google.maps.event.addListener(marker, 'click', function() {
-                                marker.info.open(map, marker);
-                            })
-                            //alert("ok!");
-                        } else {
-
-                            if(status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
-                            //alert("{{this.name}}" + " failed to add because " + status);
-                        }
-                    });
-                    {{/each}}
-
-                    });
-                }
-
-
+                               marker.info.open(map, marker);
+                           })
+        }
+        else
+        {
+            if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+            {
+                setTimeout(function() { geoCode(position); }, (timeout * 3));
             }
+        }
+        stopped_event++;
+        if (stopped_event < EVENTS.length)
+        {
+            setTimeout(function() { geoCode(stopped_event); }, (timeout));
+        }
+    });
+    }
+
+
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5t2by1Yo1Yy8Yn-pqpbxmWZ2MsZWC7vk
-&callback=initMap">
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5t2by1Yo1Yy8Yn-pqpbxmWZ2MsZWC7vk&callback=initMap">
 </script>
